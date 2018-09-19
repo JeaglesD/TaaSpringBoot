@@ -13,8 +13,8 @@ import taa.springboot.domain.Activity;
 @Component
 public interface ActivityDao  extends JpaRepository <Activity, Long>{
 	
-	@Query("from activity a where a.label = :label")
-	public Activity findByPseudo(@Param("labal") String label);
+	@Query("from Activity a where Activity.label = :label")
+	public Activity findByPseudo(@Param("label") String label);
 	
 	
 }
