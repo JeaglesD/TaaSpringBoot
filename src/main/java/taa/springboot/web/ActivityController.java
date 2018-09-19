@@ -16,7 +16,7 @@ import taa.springboot.domain.Activity;
 import taa.springboot.domain.User;
 import taa.springboot.service.ActivityDao;
 import taa.springboot.service.UserDao;
-@RestController("/user")
+@RestController("/activity")
 public class ActivityController {
 	
 	@Autowired
