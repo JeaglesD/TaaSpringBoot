@@ -15,13 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 import taa.springboot.domain.User;
 import taa.springboot.service.UserDao;
 
-@RestController("/user")
+@RestController
 public class UserController {
 	
 	@Autowired
 	private UserDao userDao;
 	
-	@PostMapping("/create")
+	@PostMapping("/users/create")
 	public @ResponseBody ResponseEntity<String> create(@RequestBody User user){
 		try{
 			userDao.save(user);
@@ -31,7 +31,7 @@ public class UserController {
 		return new ResponseEntity<String>("POST Response", HttpStatus.OK);
 	}
 	
-	@DeleteMapping("/delete/{id}")
+	@DeleteMapping("/users/delete/{id}")
 	public @ResponseBody ResponseEntity<String> delete(@PathVariable String id){
 		try {
 			userDao.delete(userDao.findById(Long.parseLong(id)).get());
@@ -41,17 +41,17 @@ public class UserController {
 		return new ResponseEntity<String>("DELETE Response", HttpStatus.OK);
 	}
 	
-	@GetMapping("/{id}")
+	@GetMapping("/users/{id}")
 	public @ResponseBody ResponseEntity<User> getById(@PathVariable String id){
 		return new ResponseEntity<User>(userDao.findById(Long.parseLong(id)).get(), HttpStatus.OK);
 	}
 	
-	@GetMapping("/pseudo/{pseudo}")
+	@GetMapping("/users/pseudo/{pseudo}")
 	public @ResponseBody ResponseEntity<User> getByPseudo(@PathVariable String pseudo){
 		return new ResponseEntity<User>(userDao.findByPseudo(pseudo), HttpStatus.OK);
 	}
 	
-	@PutMapping("/update")
+	@PutMapping("/users/update")
 	public @ResponseBody ResponseEntity<String> update(@RequestBody User user) {
 		try {		
 			userDao.save(user);
