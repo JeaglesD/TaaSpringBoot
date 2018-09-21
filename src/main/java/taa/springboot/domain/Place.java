@@ -1,7 +1,6 @@
 package taa.springboot.domain;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -19,9 +18,9 @@ public class Place {
 
     private Integer postCode;
     
-    private List<User> users = new ArrayList<User>();
+    private Set<User> users;
 
-    private List<Activity> activities = new ArrayList<Activity>();
+    private Set<Activity> activities;
     
 
 	public Place() {
@@ -32,10 +31,6 @@ public class Place {
 		this.name = name;
 		this.postCode = postCode;
 	}
-
-	public Place(String name) {
-        this.name = name;
-    }
 
 	@Id
     @GeneratedValue
@@ -67,12 +62,12 @@ public class Place {
 	@JoinTable(name = "PlaceUser",
 			joinColumns = { @JoinColumn(name = "idPlace") },
 			inverseJoinColumns = { @JoinColumn(name = "idUser") })
-	public List<User> getUsers() {
+	public Set<User> getUsers() {
 		return users;
 	}
 
 
-	public void setUsers(List<User> users) {
+	public void setUsers(Set<User> users) {
 		this.users = users;
 	}
 	
@@ -80,11 +75,11 @@ public class Place {
 	@JoinTable( name = "ActivityPlace",
 			joinColumns = { @JoinColumn(name = "idPlace") },
 			inverseJoinColumns = { @JoinColumn(name = "idActivity") })
-    public List<Activity> getActivities() {
+    public Set<Activity> getActivities() {
 		return activities;
 	}
 
-	public void setActivities(List<Activity> activities) {
+	public void setActivities(Set<Activity> activities) {
 		this.activities = activities;
 	}
 	
