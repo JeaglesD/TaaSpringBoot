@@ -9,14 +9,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import taa.springboot.domain.Activity;
-import taa.springboot.domain.User;
 import taa.springboot.service.ActivityDao;
-import taa.springboot.service.UserDao;
-@RestController("/user")
+
+@RestController
+@RequestMapping("/activities")
 public class ActivityController {
 	
 	@Autowired
@@ -48,8 +49,8 @@ public class ActivityController {
 	}
 	
 	@GetMapping("/pseudo/{pseudo}")
-	public @ResponseBody ResponseEntity<Activity> getByPseudo(@PathVariable String pseudo){
-		return new ResponseEntity<Activity>(activityDao.findByPseudo(pseudo), HttpStatus.OK);
+	public @ResponseBody ResponseEntity<Activity> getByLabel(@PathVariable String pseudo){
+		return new ResponseEntity<Activity>(activityDao.findByLabel(pseudo), HttpStatus.OK);
 	}
 	
 	@PutMapping("/update")

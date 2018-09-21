@@ -1,19 +1,13 @@
-package taa.springboot.domain;
+package taa.springboot.dto;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 
-@Entity
-public class User {
+public class UserDto {
 
     private Long idUser;
 
@@ -23,22 +17,20 @@ public class User {
     
     private String mail;
     
-    private Set<Place> places;
+    private List<Long> idPlaces = new ArrayList<Long>();
 
-    public User() {
+    public UserDto() {
         super();
     }
   
 
-    public User(String pseudo, String password, String mail) {
+    public UserDto(String pseudo, String password, String mail) {
 		super();
 		this.pseudo = pseudo;
 		this.password = password;
 		this.mail = mail;
 	}
 
-    @Id
-    @GeneratedValue
     public Long getIdUser() {
 		return idUser;
 	}
@@ -77,19 +69,17 @@ public class User {
 		this.mail = mail;
 	}
 
-	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "PlaceUser",
-			joinColumns = { @JoinColumn(name = "idUser") },
-			inverseJoinColumns = { @JoinColumn( name = "idPlace") })
-	public Set<Place> getPlaces() {
-		return places;
-	}
-
-
-	public void setPlaces(Set<Place> places) {
-		this.places = places;
-	}
 	
+	public List<Long> getIdPlaces() {
+		return idPlaces;
+	}
+
+
+	public void setIdPlaces(List<Long> idPlaces) {
+		this.idPlaces = idPlaces;
+	}
+
+
 	@Override
 	public String toString(){
 		  return "User [idUser=" + idUser + ", pseudo=" + pseudo + ", password="
