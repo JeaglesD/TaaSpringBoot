@@ -6,13 +6,15 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import taa.springboot.domain.User;
+import taa.springboot.domain.Activity;
+
 
 @Transactional
 @Component
-public interface UserDao extends JpaRepository<User, Long>{
+public interface ActivityDao  extends JpaRepository <Activity, Long>{
 	
-	@Query("from User as u where u.pseudo = :pseudo")
-	public User findByPseudo(@Param("pseudo") String pseudo);
+	@Query("from Activity a where Activity.label = :label")
+	public Activity findByPseudo(@Param("label") String label);
+	
 	
 }

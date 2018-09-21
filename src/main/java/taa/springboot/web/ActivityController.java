@@ -12,49 +12,50 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import taa.springboot.domain.Activity;
 import taa.springboot.domain.User;
+import taa.springboot.service.ActivityDao;
 import taa.springboot.service.UserDao;
-
-@RestController
-public class UserController {
+@RestController("/user")
+public class ActivityController {
 	
 	@Autowired
-	private UserDao userDao;
+	private ActivityDao activityDao;
 	
-	@PostMapping("/users/create")
-	public @ResponseBody ResponseEntity<String> create(@RequestBody User user){
+	@PostMapping("/create")
+	public @ResponseBody ResponseEntity<String> create(@RequestBody Activity activity){
 		try{
-			userDao.save(user);
+			activityDao.save(activity);
 		}catch(Exception e) {
 			return new ResponseEntity<String>("POST Response", HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<String>("POST Response", HttpStatus.OK);
 	}
 	
-	@DeleteMapping("/users/delete/{id}")
+	@DeleteMapping("/delete/{id}")
 	public @ResponseBody ResponseEntity<String> delete(@PathVariable String id){
 		try {
-			userDao.delete(userDao.findById(Long.parseLong(id)).get());
+			activityDao.delete(activityDao.findById(Long.parseLong(id)).get());
 		} catch (Exception ex) {
 			return new ResponseEntity<String>("DELETE Response", HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<String>("DELETE Response", HttpStatus.OK);
 	}
 	
-	@GetMapping("/users/{id}")
-	public @ResponseBody ResponseEntity<User> getById(@PathVariable String id){
-		return new ResponseEntity<User>(userDao.findById(Long.parseLong(id)).get(), HttpStatus.OK);
+	@GetMapping("/{id}")
+	public @ResponseBody ResponseEntity<Activity> getById(@PathVariable String id){
+		return new ResponseEntity<Activity>(activityDao.findById(Long.parseLong(id)).get(), HttpStatus.OK);
 	}
 	
-	@GetMapping("/users/pseudo/{pseudo}")
-	public @ResponseBody ResponseEntity<User> getByPseudo(@PathVariable String pseudo){
-		return new ResponseEntity<User>(userDao.findByPseudo(pseudo), HttpStatus.OK);
+	@GetMapping("/pseudo/{pseudo}")
+	public @ResponseBody ResponseEntity<Activity> getByPseudo(@PathVariable String pseudo){
+		return new ResponseEntity<Activity>(activityDao.findByPseudo(pseudo), HttpStatus.OK);
 	}
 	
-	@PutMapping("/users/update")
-	public @ResponseBody ResponseEntity<String> update(@RequestBody User user) {
+	@PutMapping("/update")
+	public @ResponseBody ResponseEntity<String> update(@RequestBody Activity activity) {
 		try {		
-			userDao.save(user);
+			activityDao.save(activity);
 		}catch (Exception ex) {
 			return new ResponseEntity<String>("PUT Response",HttpStatus.BAD_REQUEST);
 		}
