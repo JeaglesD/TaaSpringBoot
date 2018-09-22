@@ -1,7 +1,6 @@
 package taa.springboot.dto;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 public class PlaceDto {
 	private Long idPlace;
@@ -10,9 +9,9 @@ public class PlaceDto {
 
     private Integer postCode;
     
-    private List<Long> idUsers = new ArrayList<Long>();
+    private Set<Long> idUsers;
 
-    private List<Long> idActivities = new ArrayList<Long>();
+    private Set<Long> idActivities;
     
 
 	public PlaceDto(){
@@ -50,19 +49,19 @@ public class PlaceDto {
 	}
 
 	
-	public List<Long> getIdUsers() {
+	public Set<Long> getIdUsers() {
 		return idUsers;
 	}
 
-	public void setIdUsers(List<Long> idUsers) {
+	public void setIdUsers(Set<Long> idUsers) {
 		this.idUsers = idUsers;
 	}
 
-	public List<Long> getIdActivities() {
+	public Set<Long> getIdActivities() {
 		return idActivities;
 	}
 
-	public void setIdActivities(List<Long> idActivities) {
+	public void setIdActivities(Set<Long> idActivities) {
 		this.idActivities = idActivities;
 	}
 

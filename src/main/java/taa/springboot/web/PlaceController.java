@@ -1,5 +1,6 @@
 package taa.springboot.web;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import taa.springboot.domain.Place;
+import taa.springboot.domain.User;
+import taa.springboot.dto.PlaceDto;
+import taa.springboot.dto.UserDto;
 import taa.springboot.service.PlaceDao;
 
 @RestController
@@ -44,19 +48,43 @@ public class PlaceController {
 		return new ResponseEntity<String>("DELETE place Response", HttpStatus.OK);
 	}
 	
+	@GetMapping("/")
+	public @ResponseBody ResponseEntity<List<PlaceDto>> getAll(){
+		try{
+			List<PlaceDto> placesDto = new ArrayList<PlaceDto>();
+			List<Place> places = placeDao.findAll();
+			for(Place place : places){
+				placesDto.add(place.toPlaceDto());
+			}
+			return new ResponseEntity<List<PlaceDto>>(placesDto,HttpStatus.OK);
+		}catch(Exception ex){
+			return new ResponseEntity<List<PlaceDto>>(new ArrayList<PlaceDto>(),HttpStatus.BAD_REQUEST);
+		}
+	}
+	
 	@GetMapping("/{id}")
-	public @ResponseBody ResponseEntity<Place> getById(@PathVariable Long id){
-		return new ResponseEntity<Place>(placeDao.findById(id).get(), HttpStatus.OK);
+	public @ResponseBody ResponseEntity<PlaceDto> getById(@PathVariable Long id){
+		return new ResponseEntity<PlaceDto>(placeDao.findById(id).get().toPlaceDto(), HttpStatus.OK);
 	}
 	
 	@GetMapping("/postCode/{postCode}")
-	public @ResponseBody ResponseEntity<List<Place>> getByPostCode(@PathVariable String postCode){
-		return new ResponseEntity<List<Place>>(placeDao.findByPostCode(Integer.parseInt(postCode)), HttpStatus.OK);
+	public @ResponseBody ResponseEntity<List<PlaceDto>> getByPostCode(@PathVariable Integer postCode){
+		List<PlaceDto> placesDto = new ArrayList<PlaceDto>();
+		List<Place> places = placeDao.findByPostCode(postCode);
+		for(Place place : places){
+			placesDto.add(place.toPlaceDto());
+		}
+		return new ResponseEntity<List<PlaceDto>>(placesDto,HttpStatus.OK);
 	}
 	
 	@GetMapping("/name/{name}")
-	public @ResponseBody ResponseEntity<List<Place>> getByName(@PathVariable String name){
-		return new ResponseEntity<List<Place>>(placeDao.findByName(name), HttpStatus.OK);
+	public @ResponseBody ResponseEntity<List<PlaceDto>> getByName(@PathVariable String name){
+		List<PlaceDto> placesDto = new ArrayList<PlaceDto>();
+		List<Place> places = placeDao.findByName(name);
+		for(Place place : places){
+			placesDto.add(place.toPlaceDto());
+		}
+		return new ResponseEntity<List<PlaceDto>>(placesDto,HttpStatus.OK);
 	}
 	
 	@PutMapping("/update")

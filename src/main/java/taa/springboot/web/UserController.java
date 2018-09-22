@@ -1,6 +1,9 @@
 package taa.springboot.web;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import taa.springboot.domain.Place;
 import taa.springboot.domain.User;
+import taa.springboot.dto.UserDto;
 import taa.springboot.service.PlaceDao;
 import taa.springboot.service.UserDao;
 
@@ -49,14 +53,28 @@ public class UserController {
 		return new ResponseEntity<String>("DELETE user Response", HttpStatus.OK);
 	}
 	
+	@GetMapping("/")
+	public @ResponseBody ResponseEntity<List<UserDto>> getAll(){
+		try{
+			List<UserDto> usersDto = new ArrayList<UserDto>();
+			List<User> users = userDao.findAll();
+			for(User user : users){
+				usersDto.add(user.toUserDto());
+			}			
+			return new ResponseEntity<List<UserDto>>(usersDto, HttpStatus.OK);
+		}catch(Exception ex){
+			return new ResponseEntity<List<UserDto>>(new ArrayList<UserDto>(),HttpStatus.BAD_REQUEST);
+		}
+	}
+	
 	@GetMapping("/{id}")
-	public @ResponseBody ResponseEntity<User> getById(@PathVariable String id){
-		return new ResponseEntity<User>(userDao.findById(Long.parseLong(id)).get(), HttpStatus.OK);
+	public @ResponseBody ResponseEntity<UserDto> getById(@PathVariable String id){
+		return new ResponseEntity<UserDto>(userDao.findById(Long.parseLong(id)).get().toUserDto(), HttpStatus.OK);
 	}
 	
 	@GetMapping("/pseudo/{pseudo}")
-	public @ResponseBody ResponseEntity<User> getByPseudo(@PathVariable String pseudo){
-		return new ResponseEntity<User>(userDao.findByPseudo(pseudo), HttpStatus.OK);
+	public @ResponseBody ResponseEntity<UserDto> getByPseudo(@PathVariable String pseudo){
+		return new ResponseEntity<UserDto>(userDao.findByPseudo(pseudo).toUserDto(), HttpStatus.OK);
 	}
 	
 	@PutMapping("/update")
@@ -69,26 +87,16 @@ public class UserController {
 		return new ResponseEntity<String>("PUT user Response",HttpStatus.OK);
 	}
 	
-	@PutMapping("/{id}/addPlace")
-	public @ResponseBody ResponseEntity<String> addPlace(@PathVariable Long id, @RequestBody Place place){
-		
+	@PutMapping("/{idUser}/addPlace/{idPlace}")
+	public @ResponseBody ResponseEntity<String> addPlace(@PathVariable Long idUser, @PathVariable Long idPlace){
 		try {
-			User user = userDao.findById(id).get();
-			Place aPlace = placeDao.findByNameAndCodePost(place.getName(), place.getPostCode());			
-			System.out.println("aPlace" + aPlace.toString());
-			// create the place in the database
-			if(aPlace == null){
-				place.getUsers().add(user);
-				placeDao.save(place);
-				user.getPlaces().add(place);
-			}else{
-				aPlace.getUsers().add(user);
-				placeDao.save(aPlace);
-				user.getPlaces().add(aPlace);
-			}
-			
+			User user = userDao.findById(idUser).get();
+			Place place = placeDao.findById(idPlace).get();			
+			place.getUsers().add(user);
+			placeDao.save(place);
+			user.getPlaces().add(place);			
 		}catch(Exception ex){
-			return new ResponseEntity<String>("PUT user Response", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("PUT place not found", HttpStatus.BAD_REQUEST);
 		}	
 		return new ResponseEntity<String>("PUT user Response", HttpStatus.OK);
 	}

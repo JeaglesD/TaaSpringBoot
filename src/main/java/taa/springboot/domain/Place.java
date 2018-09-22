@@ -1,5 +1,6 @@
 package taa.springboot.domain;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -9,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+
+import taa.springboot.dto.PlaceDto;
 
 @Entity
 public class Place {
@@ -82,6 +85,27 @@ public class Place {
 	public void setActivities(Set<Activity> activities) {
 		this.activities = activities;
 	}
+	
+	public PlaceDto toPlaceDto(){
+    	PlaceDto placeDto = new PlaceDto();
+    	placeDto.setIdPlace(this.getIdPlace());
+    	placeDto.setName(this.getName());
+    	placeDto.setPostCode(this.getPostCode());
+    	    	
+    	Set<Long> idUsers = new HashSet<Long>();
+    	for(User user : this.getUsers()){
+    		idUsers.add(user.getIdUser());
+    	}
+    	placeDto.setIdUsers(idUsers);
+    	
+    	
+    	Set<Long> idActivities = new HashSet<Long>();
+    	for(Activity activity : this.getActivities()){
+    		idActivities.add(activity.getIdActivity());
+    	}
+    	placeDto.setIdActivities(idActivities);
+    	return placeDto;
+    }
 	
 	@Override
     public String toString() {

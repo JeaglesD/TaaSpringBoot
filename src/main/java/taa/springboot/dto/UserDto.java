@@ -1,11 +1,6 @@
 package taa.springboot.dto;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import java.util.Set;
 
 public class UserDto {
 
@@ -17,7 +12,7 @@ public class UserDto {
     
     private String mail;
     
-    private List<Long> idPlaces = new ArrayList<Long>();
+    private Set<Long> idPlaces;
 
     public UserDto() {
         super();
@@ -70,12 +65,12 @@ public class UserDto {
 	}
 
 	
-	public List<Long> getIdPlaces() {
+	public Set<Long> getIdPlaces() {
 		return idPlaces;
 	}
 
 
-	public void setIdPlaces(List<Long> idPlaces) {
+	public void setIdPlaces(Set<Long> idPlaces) {
 		this.idPlaces = idPlaces;
 	}
 
