@@ -14,7 +14,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import taa.springboot.domain.Activity;
+import taa.springboot.domain.Place;
+import taa.springboot.domain.Weather;
 import taa.springboot.service.ActivityDao;
+import taa.springboot.service.PlaceDao;
+import taa.springboot.service.WeatherDao;
 
 @RestController
 @RequestMapping("/activities")
@@ -22,6 +26,10 @@ public class ActivityController {
 	
 	@Autowired
 	private ActivityDao activityDao;
+	@Autowired
+	private WeatherDao weatherDao;
+	@Autowired
+	private PlaceDao placeDao;
 	
 	@PostMapping("/create")
 	public @ResponseBody ResponseEntity<String> create(@RequestBody Activity activity){
@@ -62,5 +70,35 @@ public class ActivityController {
 		}
 		return new ResponseEntity<String>("PUT Response",HttpStatus.OK);
 	}
+	
+	@PutMapping("/{idActivity}/addWeather/{idWeather}")
+	public @ResponseBody ResponseEntity<String> addWeather(@PathVariable Long idActivity, @PathVariable Long idWeather){
+		try {
+			Activity activity = activityDao.findById(idActivity).get();
+			Weather weather = weatherDao.findById(idWeather).get();
+			activity.getWeathers().add(weather);
+		}catch(Exception ex) {
+			return new ResponseEntity<String>("PUT place not found", HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<String>("PUT user Response", HttpStatus.OK);
+		
+	}
+	
+	@PutMapping("/{idActivity}/addPlace/{idPlace}")
+	public @ResponseBody ResponseEntity<String> addPlace(@PathVariable Long idActivity,@PathVariable Long idPlace){
+		try {
+			Activity activity = activityDao.findById(idActivity).get();
+			Place place = placeDao.findById(idPlace).get();
+			place.getActivities().add(activity);
+			placeDao.save(place);
+			activity.getPlaces().add(place);
+		}catch(Exception ex) {
+			return new ResponseEntity<String>("PUT place not found", HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<String>("PUT user Response", HttpStatus.OK);
+	}
+	
+	
+	
 	
 }
