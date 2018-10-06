@@ -10,6 +10,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+
+import taa.springboot.dto.ActivityDto;
+
 import javax.persistence.JoinColumn;
 
 @Entity
@@ -25,10 +28,8 @@ public class Activity {
 	}
 
 
-	public Activity(String label,Set<Place> places, Set<Weather> weathers) {
+	public Activity(String label) {
 		this.label=label;
-		this.places=places;
-		this.weathers=weathers;
 	}
 
 
@@ -92,13 +93,41 @@ public class Activity {
 	public void setPlaces(Set<Place> places) {
 		this.places = places;
 	}
-
+	
+	public ActivityDto toActivityDto(){
+		ActivityDto activityDto = new ActivityDto();
+		activityDto.setIdActivity(this.getIdActivity());
+		activityDto.setLabel(this.getLabel());
+		Set<Long> idUsers = new HashSet<Long>();
+		for(User user : this.getUsers()){
+			idUsers.add(user.getIdUser());			
+		}
+		activityDto.setIdUsers(idUsers);
+		
+		Set<Long> idPlaces = new HashSet<Long>();
+		for(Place place : this.getPlaces()){
+			idPlaces.add(place.getIdPlace());			
+		}
+		activityDto.setIdPlaces(idPlaces);
+		
+		Set<Long> idWeathers = new HashSet<Long>();
+		for(Weather weather : this.getWeathers()){
+			idWeathers.add(weather.getIdWeather());			
+		}
+		activityDto.setIdWeathers(idWeathers);
+		
+		return activityDto;
+		
+	}
 
 	@Override
 	public String toString() {
 		return "Activity [idActivity=" + idActivity + ", label=" + label + ", Weathers="
 				+ weathers.toString() + "]";
 	}
+
+
+
 
 
 

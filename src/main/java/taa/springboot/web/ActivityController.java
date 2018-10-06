@@ -1,5 +1,8 @@
 package taa.springboot.web;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import taa.springboot.domain.Activity;
 import taa.springboot.domain.Place;
+import taa.springboot.domain.User;
 import taa.springboot.domain.Weather;
+import taa.springboot.dto.ActivityDto;
+import taa.springboot.dto.UserDto;
 import taa.springboot.service.ActivityDao;
 import taa.springboot.service.PlaceDao;
 import taa.springboot.service.WeatherDao;
@@ -51,14 +57,33 @@ public class ActivityController {
 		return new ResponseEntity<String>("DELETE Response", HttpStatus.OK);
 	}
 	
-	@GetMapping("/{id}")
-	public @ResponseBody ResponseEntity<Activity> getById(@PathVariable String id){
-		return new ResponseEntity<Activity>(activityDao.findById(Long.parseLong(id)).get(), HttpStatus.OK);
+	@GetMapping("/")
+	public @ResponseBody ResponseEntity<List<ActivityDto>> getAll(){
+		try{
+			List<ActivityDto> activitiesDto = new ArrayList<ActivityDto>();
+			List<Activity> activities = activityDao.findAll();
+			for(Activity activity : activities){
+				activitiesDto.add(activity.toActivityDto());
+			}			
+			return new ResponseEntity<List<ActivityDto>>(activitiesDto, HttpStatus.OK);
+		}catch(Exception ex){
+			return new ResponseEntity<List<ActivityDto>>(new ArrayList<ActivityDto>(),HttpStatus.BAD_REQUEST);
+		}
 	}
 	
-	@GetMapping("/pseudo/{pseudo}")
-	public @ResponseBody ResponseEntity<Activity> getByLabel(@PathVariable String pseudo){
-		return new ResponseEntity<Activity>(activityDao.findByLabel(pseudo), HttpStatus.OK);
+	@GetMapping("/{id}")
+	public @ResponseBody ResponseEntity<ActivityDto> getById(@PathVariable String id){
+		return new ResponseEntity<ActivityDto>(activityDao.findById(Long.parseLong(id)).get().toActivityDto(), HttpStatus.OK);
+	}
+	
+	@GetMapping("/label/{label}")
+	public @ResponseBody ResponseEntity<List<ActivityDto>> getByLabel(@PathVariable String label){
+		List<ActivityDto> activitiesDto = new ArrayList<ActivityDto>();
+		List<Activity> activities = activityDao.findByLabel(label);
+		for(Activity activity : activities){
+			activitiesDto.add(activity.toActivityDto());
+		}			
+		return new ResponseEntity<List<ActivityDto>>(activitiesDto, HttpStatus.OK);
 	}
 	
 	@PutMapping("/update")

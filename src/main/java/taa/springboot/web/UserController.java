@@ -100,4 +100,18 @@ public class UserController {
 		}	
 		return new ResponseEntity<String>("PUT user Response", HttpStatus.OK);
 	}
+	
+	@DeleteMapping("/{idUser}/deletePlace/{idPlace}")
+	public @ResponseBody ResponseEntity<String> deletePlace(@PathVariable Long idUser, @PathVariable Long idPlace){
+		try {
+			User user = userDao.findById(idUser).get();
+			Place place = placeDao.findById(idPlace).get();
+			place.getUsers().remove(user);
+			placeDao.save(place);
+			user.getPlaces().remove(place);
+		}catch(Exception ex){
+			return new ResponseEntity<String>("DELETE user Response", HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<String>("DELETE user Response", HttpStatus.OK);
+	}
 }
