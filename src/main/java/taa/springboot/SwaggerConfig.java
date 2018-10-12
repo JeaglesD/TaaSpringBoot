@@ -21,10 +21,13 @@ public class SwaggerConfig {
 	@Bean
 	public Docket postsApi() {
 		return new Docket(DocumentationType.SWAGGER_2).groupName("public-api")
-				.apiInfo(apiInfo()).select().paths(PathSelectors.any()).build();
+				.apiInfo(apiInfo()).select().paths(postPaths()).build();
 	}
 
-
+	private Predicate<String> postPaths() {
+		return regex("/api/.*");
+	}
+	
 	private ApiInfo apiInfo() {
 		return new ApiInfoBuilder().title("Taa Project API")
 				.description("Taa Project API reference for developers")

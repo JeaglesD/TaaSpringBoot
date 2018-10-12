@@ -17,13 +17,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import taa.springboot.domain.Place;
-import taa.springboot.domain.User;
 import taa.springboot.dto.PlaceDto;
-import taa.springboot.dto.UserDto;
 import taa.springboot.service.PlaceDao;
 
 @RestController
-@RequestMapping("/places")
+@RequestMapping("/api/places")
 public class PlaceController {
 	@Autowired
 	private PlaceDao placeDao;
@@ -33,9 +31,9 @@ public class PlaceController {
 		try{
 			placeDao.save(place);
 		}catch(Exception e) {
-			return new ResponseEntity<String>("POST place Response", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("POST place not found", HttpStatus.BAD_REQUEST);
 		}
-		return new ResponseEntity<String>("POST place Response", HttpStatus.OK);
+		return new ResponseEntity<String>("POST place ok", HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/delete/{id}")
@@ -43,14 +41,16 @@ public class PlaceController {
 		try {
 			placeDao.delete(placeDao.findById(id).get());
 		} catch (Exception ex) {
-			return new ResponseEntity<String>("DELETE place Response", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("DELETE place not found", HttpStatus.BAD_REQUEST);
 		}
-		return new ResponseEntity<String>("DELETE place Response", HttpStatus.OK);
+		return new ResponseEntity<String>("DELETE place ok", HttpStatus.OK);
 	}
 	
 	@GetMapping("/")
 	public @ResponseBody ResponseEntity<List<PlaceDto>> getAll(){
+		System.out.println("ici");
 		try{
+			System.out.println("là");
 			List<PlaceDto> placesDto = new ArrayList<PlaceDto>();
 			List<Place> places = placeDao.findAll();
 			for(Place place : places){
@@ -67,21 +67,11 @@ public class PlaceController {
 		return new ResponseEntity<PlaceDto>(placeDao.findById(id).get().toPlaceDto(), HttpStatus.OK);
 	}
 	
-	@GetMapping("/postCode/{postCode}")
-	public @ResponseBody ResponseEntity<List<PlaceDto>> getByPostCode(@PathVariable Integer postCode){
-		List<PlaceDto> placesDto = new ArrayList<PlaceDto>();
-		List<Place> places = placeDao.findByPostCode(postCode);
-		for(Place place : places){
-			placesDto.add(place.toPlaceDto());
-		}
-		return new ResponseEntity<List<PlaceDto>>(placesDto,HttpStatus.OK);
-	}
-	
+
 	@GetMapping("/name/{name}")
 	public @ResponseBody ResponseEntity<List<PlaceDto>> getByName(@PathVariable String name){
 		List<PlaceDto> placesDto = new ArrayList<PlaceDto>();
-		List<Place> places = placeDao.findByName(name);
-		for(Place place : places){
+		for(Place place : placeDao.findByName(name)){
 			placesDto.add(place.toPlaceDto());
 		}
 		return new ResponseEntity<List<PlaceDto>>(placesDto,HttpStatus.OK);
@@ -92,9 +82,9 @@ public class PlaceController {
 		try {		
 			placeDao.save(place);
 		}catch (Exception ex) {
-			return new ResponseEntity<String>("PUT place Response",HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("PUT place not found",HttpStatus.BAD_REQUEST);
 		}
-		return new ResponseEntity<String>("PUT place Response",HttpStatus.OK);
+		return new ResponseEntity<String>("PUT place ok",HttpStatus.OK);
 	}
 
 }

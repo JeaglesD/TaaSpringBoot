@@ -17,7 +17,7 @@ import taa.springboot.domain.Wave;
 import taa.springboot.service.WaveDao;
 
 @RestController
-@RequestMapping("/wave")
+@RequestMapping("/api/wave")
 public class WaveController {
 
 	@Autowired

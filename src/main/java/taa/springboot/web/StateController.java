@@ -17,7 +17,7 @@ import taa.springboot.domain.State;
 import taa.springboot.service.StateDao;
 
 @RestController
-@RequestMapping("/state")
+@RequestMapping("/api/state")
 public class StateController {
 
 	@Autowired

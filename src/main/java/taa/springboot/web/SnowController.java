@@ -17,7 +17,7 @@ import taa.springboot.domain.Snow;
 import taa.springboot.service.SnowDao;
 
 @RestController
-@RequestMapping("/snow")
+@RequestMapping("/api/snow")
 public class SnowController {
 
 	@Autowired

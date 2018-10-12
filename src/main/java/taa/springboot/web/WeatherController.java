@@ -17,7 +17,7 @@ import taa.springboot.domain.Weather;
 import taa.springboot.service.WeatherDao;
 
 @RestController
-@RequestMapping("/weather")
+@RequestMapping("/api/weather")
 public class WeatherController {
 
 	@Autowired

@@ -17,7 +17,7 @@ import taa.springboot.domain.Wind;
 import taa.springboot.service.WindDao;
 
 @RestController
-@RequestMapping("/wind")
+@RequestMapping("/api/wind")
 public class WindController {
 
 	@Autowired

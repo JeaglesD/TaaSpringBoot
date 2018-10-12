@@ -27,7 +27,7 @@ import taa.springboot.service.PlaceDao;
 import taa.springboot.service.WeatherDao;
 
 @RestController
-@RequestMapping("/activities")
+@RequestMapping("/api/activities")
 public class ActivityController {
 	
 	@Autowired
@@ -42,9 +42,9 @@ public class ActivityController {
 		try{
 			activityDao.save(activity);
 		}catch(Exception e) {
-			return new ResponseEntity<String>("POST Response", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("POST activity not found", HttpStatus.BAD_REQUEST);
 		}
-		return new ResponseEntity<String>("POST Response", HttpStatus.OK);
+		return new ResponseEntity<String>("POST activity ok", HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/delete/{id}")
@@ -52,9 +52,9 @@ public class ActivityController {
 		try {
 			activityDao.delete(activityDao.findById(Long.parseLong(id)).get());
 		} catch (Exception ex) {
-			return new ResponseEntity<String>("DELETE Response", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("DELETE activity not found", HttpStatus.BAD_REQUEST);
 		}
-		return new ResponseEntity<String>("DELETE Response", HttpStatus.OK);
+		return new ResponseEntity<String>("DELETE activity ok", HttpStatus.OK);
 	}
 	
 	@GetMapping("/")
@@ -91,9 +91,9 @@ public class ActivityController {
 		try {		
 			activityDao.save(activity);
 		}catch (Exception ex) {
-			return new ResponseEntity<String>("PUT Response",HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("PUT activity not found",HttpStatus.BAD_REQUEST);
 		}
-		return new ResponseEntity<String>("PUT Response",HttpStatus.OK);
+		return new ResponseEntity<String>("PUT activity ok",HttpStatus.OK);
 	}
 	
 	@PutMapping("/{idActivity}/addWeather/{idWeather}")
@@ -103,9 +103,9 @@ public class ActivityController {
 			Weather weather = weatherDao.findById(idWeather).get();
 			activity.getWeathers().add(weather);
 		}catch(Exception ex) {
-			return new ResponseEntity<String>("PUT place not found", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("PUT activity not found", HttpStatus.BAD_REQUEST);
 		}
-		return new ResponseEntity<String>("PUT user Response", HttpStatus.OK);
+		return new ResponseEntity<String>("PUT activity ok", HttpStatus.OK);
 		
 	}
 	
@@ -118,9 +118,9 @@ public class ActivityController {
 			placeDao.save(place);
 			activity.getPlaces().add(place);
 		}catch(Exception ex) {
-			return new ResponseEntity<String>("PUT place not found", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("PUT activity not found", HttpStatus.BAD_REQUEST);
 		}
-		return new ResponseEntity<String>("PUT user Response", HttpStatus.OK);
+		return new ResponseEntity<String>("PUT activity ok", HttpStatus.OK);
 	}
 	
 	

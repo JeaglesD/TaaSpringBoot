@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 
 import taa.springboot.dto.PlaceDto;
 
@@ -18,8 +19,10 @@ public class Place {
 	private Long idPlace;
 
     private String name;
-
-    private Integer postCode;
+    
+    private String address; 
+    
+    private City city;
     
     private Set<User> users;
 
@@ -27,12 +30,14 @@ public class Place {
     
 
 	public Place() {
+		super();
     }
     
-	public Place(String name, Integer postCode) {
+	public Place(String name, String address, City city) {
 		super();
 		this.name = name;
-		this.postCode = postCode;
+		this.address = address;
+		this.city = city;
 	}
 
 	@Id
@@ -52,13 +57,23 @@ public class Place {
     public void setName(String name){
         this.name = name;
     }
-
-    public Integer getPostCode(){
-		return postCode;
+    
+	public String getAddress() {
+		return address;
 	}
 
-	public void setPostCode(Integer postCode) {
-		this.postCode = postCode;
+	public void setAddress(String adress) {
+		this.address = adress;
+	}
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "idCity")
+	public City getCity() {
+		return city;
+	}
+
+	public void setCity(City city) {
+		this.city = city;
 	}
 
 	@ManyToMany(fetch = FetchType.LAZY)
@@ -90,8 +105,10 @@ public class Place {
     	PlaceDto placeDto = new PlaceDto();
     	placeDto.setIdPlace(this.getIdPlace());
     	placeDto.setName(this.getName());
-    	placeDto.setPostCode(this.getPostCode());
-    	    	
+    	placeDto.setAddress(this.getAddress());
+    	if(this.getCity() != null) {
+          	placeDto.setIdCity(this.getCity().getIdCity());
+    	}
     	Set<Long> idUsers = new HashSet<Long>();
     	for(User user : this.getUsers()){
     		idUsers.add(user.getIdUser());
@@ -109,7 +126,7 @@ public class Place {
 	
 	@Override
     public String toString() {
-        return "Place [idPlace=" + idPlace + ", name=" + name + ", postCode="
-                + postCode + "]";
-    }
+		return "Place [idPlace=" + idPlace + ", name=" + name +
+        		", city=" + city.toString() + "]";
+	}
 }

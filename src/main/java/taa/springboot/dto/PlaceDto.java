@@ -6,8 +6,10 @@ public class PlaceDto {
 	private Long idPlace;
 
     private String name;
+    
+    private String address;
 
-    private Integer postCode;
+    private Long idCity;
     
     private Set<Long> idUsers;
 
@@ -18,10 +20,11 @@ public class PlaceDto {
 		super();
     }
     
-	public PlaceDto(String name, Integer postCode) {
+	public PlaceDto(String name, String address, Long idCity) {
 		super();
 		this.name = name;
-		this.postCode = postCode;
+		this.setAddress(address);
+		this.idCity = idCity;
 	}
 
     public Long getIdPlace() {
@@ -39,16 +42,23 @@ public class PlaceDto {
     public void setName(String name){
         this.name = name;
     }
-
-    public Integer getPostCode(){
-		return postCode;
+    
+    public String getAddress() {
+		return address;
 	}
 
-	public void setPostCode(Integer postCode) {
-		this.postCode = postCode;
+	public void setAddress(String adress) {
+		this.address = adress;
 	}
-
 	
+    public Long getIdCity() {
+    	return this.idCity;
+    }
+
+    public void setIdCity(Long idCity) {
+    	this.idCity = idCity;
+    }
+  	
 	public Set<Long> getIdUsers() {
 		return idUsers;
 	}
@@ -67,7 +77,7 @@ public class PlaceDto {
 
 	@Override
     public String toString() {
-        return "Place [idPlace=" + idPlace + ", name=" + name + ", postCode="
-                + postCode + "]";
+        return "Place [idPlace=" + idPlace + ", name=" + name +
+        		", idCity=" + idCity + "]";
     }
 }
