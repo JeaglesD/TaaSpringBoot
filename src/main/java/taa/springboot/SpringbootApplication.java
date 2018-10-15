@@ -9,8 +9,10 @@ import net.aksingh.owmjapis.DailyForecast;
 import net.aksingh.owmjapis.OpenWeatherMap;
 import org.json.JSONException;
 
+// unirest pour la consomation 
 @SpringBootApplication
 public class SpringbootApplication {
+
 
 	public static void main(String[] args) throws IOException, JSONException {
 		//SpringApplication.run(SpringbootApplication.class, args);
@@ -25,5 +27,5 @@ public class SpringbootApplication {
         // printing the max./min. temperature
         System.out.println("Temperature: " + cwd.getMainInstance().getMaxTemperature()
                             + "/" + cwd.getMainInstance().getMinTemperature() + "\'F");
-	}
+
 }

@@ -1,7 +1,9 @@
 package taa.springboot.domain;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,6 +12,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+
+import taa.springboot.dto.UserDto;
 
 @Entity
 public class User {
@@ -22,7 +26,7 @@ public class User {
     
     private String mail;
     
-    private List<Place> places = new ArrayList<Place>();
+    private Set<Place> places;
 
     public User() {
         super();
@@ -61,8 +65,7 @@ public class User {
 	public String getPassword() {
 		return password;
 	}
-
-
+	
 	public void setPassword(String password) {
 		this.password = password;
 	}
@@ -80,14 +83,29 @@ public class User {
 	@JoinTable(name = "PlaceUser",
 			joinColumns = { @JoinColumn(name = "idUser") },
 			inverseJoinColumns = { @JoinColumn( name = "idPlace") })
-	public List<Place> getPlaces() {
+	public Set<Place> getPlaces() {
 		return places;
 	}
 
 
-	public void setPlaces(List<Place> places) {
+	public void setPlaces(Set<Place> places) {
 		this.places = places;
 	}
+	
+	public  UserDto toUserDto(){
+    	UserDto userDto = new UserDto();
+    	userDto.setIdUser(this.getIdUser());
+    	userDto.setPseudo(this.getPseudo());
+    	userDto.setPassword(this.getPassword());
+    	userDto.setMail(this.getMail());
+    	
+    	Set<Long> idPlaces = new HashSet<Long>();
+    	for(Place place : this.getPlaces()){
+    		idPlaces.add(place.getIdPlace());
+    	}
+    	userDto.setIdPlaces(idPlaces);
+    	return userDto;
+    }
 	
 	@Override
 	public String toString(){
