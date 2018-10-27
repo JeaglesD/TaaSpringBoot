@@ -12,21 +12,26 @@ public class UserDto {
     
     private String mail;
     
+    private boolean enabled;
+    
+    private String role;
+    
     private Set<Long> idPlaces;
 
     public UserDto() {
         super();
     }
   
-
-    public UserDto(String pseudo, String password, String mail) {
+    public UserDto(String pseudo, String password, String mail, boolean enabled, String role) {
 		super();
 		this.pseudo = pseudo;
 		this.password = password;
 		this.mail = mail;
+		this.enabled = enabled;
+		this.role = role;
 	}
 
-    public Long getIdUser() {
+	public Long getIdUser() {
 		return idUser;
 	}
 
@@ -64,6 +69,21 @@ public class UserDto {
 		this.mail = mail;
 	}
 
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+	
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
 	
 	public Set<Long> getIdPlaces() {
 		return idPlaces;
@@ -77,8 +97,9 @@ public class UserDto {
 
 	@Override
 	public String toString(){
-		  return "User [idUser=" + idUser + ", pseudo=" + pseudo + ", password="
-	                + password + ", mail=" + mail + "]";
-	}
+		  return"User [idUser=" + idUser + ", pseudo=" + pseudo +
+				  	", password="+ password + ", mail=" + mail + 
+				  	", enalbled=" + enabled + ", role=" + role+ "]";
+		  }
 }
 

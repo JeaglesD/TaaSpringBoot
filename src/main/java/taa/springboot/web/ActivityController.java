@@ -18,10 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import taa.springboot.domain.Activity;
 import taa.springboot.domain.Place;
-import taa.springboot.domain.User;
 import taa.springboot.domain.Weather;
 import taa.springboot.dto.ActivityDto;
-import taa.springboot.dto.UserDto;
 import taa.springboot.service.ActivityDao;
 import taa.springboot.service.PlaceDao;
 import taa.springboot.service.WeatherDao;

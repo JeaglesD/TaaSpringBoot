@@ -1,4 +1,4 @@
-package com.example.springboot;
+package taa.springboot;
 
 import static org.junit.Assert.assertTrue;
 
@@ -15,7 +15,7 @@ import taa.springboot.SpringbootApplication;
 import taa.springboot.service.UserDao;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = SpringbootApplication.class,webEnvironment = WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = SpringbootApplication.class, webEnvironment = WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
 public class SpringbootApplicationTests {
 

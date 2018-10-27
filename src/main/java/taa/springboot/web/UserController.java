@@ -37,7 +37,11 @@ public class UserController {
 	@PostMapping("/create")
 	public @ResponseBody ResponseEntity<String> create(@RequestBody User user){
 		try{
-			userDao.save(user);
+			if(userDao.findByPseudo(user.getPseudo()) == null) {
+				userDao.save(user);
+			}else {
+				return new ResponseEntity<String>("POST user not found", HttpStatus.BAD_REQUEST);
+			}
 		}catch(Exception e) {
 			return new ResponseEntity<String>("POST user not found", HttpStatus.BAD_REQUEST);
 		}
@@ -75,7 +79,24 @@ public class UserController {
 	
 	@GetMapping("/pseudo/{pseudo}")
 	public @ResponseBody ResponseEntity<UserDto> getByPseudo(@PathVariable String pseudo){
-		return new ResponseEntity<UserDto>(userDao.findByPseudo(pseudo).toUserDto(), HttpStatus.OK);
+		UserDto userDto = new UserDto();
+		try {
+			userDto = userDao.findByPseudo(pseudo).get().toUserDto();			
+		}catch(Exception e){
+			return new ResponseEntity<UserDto>(userDto, HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<UserDto>(userDto, HttpStatus.OK);
+	}
+	
+	@GetMapping("/pseudo/{pseudo}/password/{password}")
+	public @ResponseBody ResponseEntity<UserDto> findByPseudoPassword(@PathVariable String pseudo, @PathVariable String password){
+		UserDto userDto;
+		try {
+			userDto = userDao.findByPseudoAndPassword(pseudo, password).get().toUserDto();			
+		}catch(Exception e){
+			return new ResponseEntity<UserDto>(new UserDto(), HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<UserDto>(userDto, HttpStatus.OK);
 	}
 	
 	@GetMapping("/{id}/places")
@@ -90,8 +111,12 @@ public class UserController {
 	
 	@PutMapping("/update")
 	public @ResponseBody ResponseEntity<String> update(@RequestBody User user) {
-		try {		
-			userDao.save(user);
+		try {
+			if(userDao.findById(user.getIdUser()).get() != null) {
+				userDao.save(user);			
+			}else{
+				return new ResponseEntity<String>("PUT user not found",HttpStatus.BAD_REQUEST);
+			}
 		}catch (Exception ex) {
 			return new ResponseEntity<String>("PUT user not found",HttpStatus.BAD_REQUEST);
 		}

@@ -26,21 +26,26 @@ public class User {
     
     private String mail;
     
+    private boolean enabled;
+    
+    private String role;
+    
     private Set<Place> places;
 
     public User() {
         super();
     }
-  
 
-    public User(String pseudo, String password, String mail) {
+    public User(String pseudo, String password, String mail, boolean enabled, String role) {
 		super();
 		this.pseudo = pseudo;
 		this.password = password;
 		this.mail = mail;
+		this.enabled = enabled;
+		this.role = role;
 	}
 
-    @Id
+	@Id
     @GeneratedValue
     public Long getIdUser() {
 		return idUser;
@@ -79,6 +84,22 @@ public class User {
 		this.mail = mail;
 	}
 
+	public boolean isEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(boolean enabled) {
+		this.enabled = enabled;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "PlaceUser",
 			joinColumns = { @JoinColumn(name = "idUser") },
@@ -98,7 +119,8 @@ public class User {
     	userDto.setPseudo(this.getPseudo());
     	userDto.setPassword(this.getPassword());
     	userDto.setMail(this.getMail());
-    	
+    	userDto.setEnabled(this.isEnabled());
+    	userDto.setRole(this.getRole());
     	Set<Long> idPlaces = new HashSet<Long>();
     	for(Place place : this.getPlaces()){
     		idPlaces.add(place.getIdPlace());
@@ -109,8 +131,9 @@ public class User {
 	
 	@Override
 	public String toString(){
-		  return "User [idUser=" + idUser + ", pseudo=" + pseudo + ", password="
-	                + password + ", mail=" + mail + "]";
+		  return "User [idUser=" + idUser + ", pseudo=" + pseudo +
+				  	", password="+ password + ", mail=" + mail + 
+				  	", enalbled=" + enabled + ", role=" + role+ "]";
 	}
 }
 

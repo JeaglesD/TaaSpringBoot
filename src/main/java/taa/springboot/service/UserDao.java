@@ -1,5 +1,7 @@
 package taa.springboot.service;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,6 +15,8 @@ import taa.springboot.domain.User;
 public interface UserDao extends JpaRepository<User, Long>{
 	
 	@Query("from User as u where u.pseudo = :pseudo")
-	public User findByPseudo(@Param("pseudo") String pseudo);
+	public Optional<User> findByPseudo(@Param("pseudo") String pseudo);
 	
+	@Query("from User as u where u.pseudo = :pseudo and u.password = :password")
+	public Optional<User> findByPseudoAndPassword(@Param("pseudo") String pseudo, @Param("password") String password);
 }
