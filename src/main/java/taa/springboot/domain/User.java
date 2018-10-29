@@ -1,10 +1,11 @@
 package taa.springboot.domain;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-
+import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -12,11 +13,18 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.Transient;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import taa.springboot.dto.UserDto;
 
 @Entity
-public class User {
+public class User implements UserDetails{
 
     private Long idUser;
 
@@ -31,7 +39,7 @@ public class User {
     private String role;
     
     private Set<Place> places;
-
+    
     public User() {
         super();
     }
@@ -56,7 +64,7 @@ public class User {
 		this.idUser = idUser;
 	}
 
-
+	@Column(nullable = false, unique = true)
 	public String getPseudo() {
 		return pseudo;
 	}
@@ -113,7 +121,7 @@ public class User {
 		this.places = places;
 	}
 	
-	public  UserDto toUserDto(){
+	public UserDto toUserDto(){
     	UserDto userDto = new UserDto();
     	userDto.setIdUser(this.getIdUser());
     	userDto.setPseudo(this.getPseudo());
@@ -128,12 +136,45 @@ public class User {
     	userDto.setIdPlaces(idPlaces);
     	return userDto;
     }
+
 	
 	@Override
 	public String toString(){
 		  return "User [idUser=" + idUser + ", pseudo=" + pseudo +
 				  	", password="+ password + ", mail=" + mail + 
 				  	", enalbled=" + enabled + ", role=" + role+ "]";
+	}
+
+	@Override
+	@Transient
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		List<GrantedAuthority> authorities = new ArrayList<>();
+		authorities.add(new SimpleGrantedAuthority(role));
+		return authorities;
+	}
+
+	@Override
+	@Transient
+	public String getUsername() {
+		return pseudo;
+	}
+
+	@Override
+	@Transient
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	@Override
+	@Transient
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	@Override
+	@Transient
+	public boolean isCredentialsNonExpired() {
+		return true;
 	}
 }
 

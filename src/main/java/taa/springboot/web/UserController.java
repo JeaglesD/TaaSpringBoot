@@ -3,11 +3,17 @@ package taa.springboot.web;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,23 +33,27 @@ import taa.springboot.service.UserDao;
 
 @RestController()
 @RequestMapping("/api/users")
-public class UserController {
+public class UserController implements UserDetailsService{
 	
 	@Autowired
 	private UserDao userDao;
 	@Autowired
 	private PlaceDao placeDao;
 	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
 	@PostMapping("/create")
 	public @ResponseBody ResponseEntity<String> create(@RequestBody User user){
 		try{
-			if(userDao.findByPseudo(user.getPseudo()) == null) {
+			if(!userDao.findByPseudo(user.getPseudo()).isPresent()) {
+				user.setPassword(passwordEncoder.encode(user.getPassword()));
 				userDao.save(user);
 			}else {
-				return new ResponseEntity<String>("POST user not found", HttpStatus.BAD_REQUEST);
+				return new ResponseEntity<String>("POST user not created", HttpStatus.BAD_REQUEST);
 			}
 		}catch(Exception e) {
-			return new ResponseEntity<String>("POST user not found", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("POST user not created", HttpStatus.BAD_REQUEST);
 		}
 		return new ResponseEntity<String>("POST user ok", HttpStatus.OK);
 	}
@@ -113,6 +123,7 @@ public class UserController {
 	public @ResponseBody ResponseEntity<String> update(@RequestBody User user) {
 		try {
 			if(userDao.findById(user.getIdUser()).get() != null) {
+				user.setPassword(passwordEncoder.encode(user.getPassword()));
 				userDao.save(user);			
 			}else{
 				return new ResponseEntity<String>("PUT user not found",HttpStatus.BAD_REQUEST);
@@ -150,4 +161,19 @@ public class UserController {
 		}	
 		return new ResponseEntity<String>("PUT user ok", HttpStatus.OK);
 	}
+
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		System.out.println("ici" + username);
+		if(userDao.findByPseudo(username).isPresent()) {
+			User user = userDao.findByPseudo(username).get();
+			System.out.println( user.toString());
+			return user;
+		}else {
+			System.out.println("Exception");
+			throw new UsernameNotFoundException(username);
+		}
+	}
 }
+
+
