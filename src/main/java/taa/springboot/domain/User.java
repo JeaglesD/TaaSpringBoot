@@ -81,6 +81,7 @@ public class User implements UserDetails{
 	
 
 	public void setPassword(String password) {
+		System.out.println("password"+ password);
 		this.password = password;
 	}
 
@@ -125,6 +126,7 @@ public class User implements UserDetails{
     	UserDto userDto = new UserDto();
     	userDto.setIdUser(this.getIdUser());
     	userDto.setPseudo(this.getPseudo());
+    	userDto.setPassword(this.getPassword());
     	userDto.setMail(this.getMail());
     	userDto.setEnabled(this.isEnabled());
     	userDto.setRole(this.getRole());

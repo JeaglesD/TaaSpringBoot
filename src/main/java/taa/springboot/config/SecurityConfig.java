@@ -46,7 +46,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 //			.withUser("admin")
 //			.password("{noop}@dm1n")
 //			.roles("ADMIN");
-
 	}
 	
 	private AuthenticationProvider authenticationProvider() {

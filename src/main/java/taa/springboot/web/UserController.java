@@ -164,10 +164,8 @@ public class UserController implements UserDetailsService{
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		System.out.println("ici" + username);
 		if(userDao.findByPseudo(username).isPresent()) {
 			User user = userDao.findByPseudo(username).get();
-			System.out.println( user.toString());
 			return user;
 		}else {
 			System.out.println("Exception");
