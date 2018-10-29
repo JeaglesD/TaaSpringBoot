@@ -79,6 +79,7 @@ public class User implements UserDetails{
 		return password;
 	}
 	
+
 	public void setPassword(String password) {
 		this.password = password;
 	}
@@ -86,7 +87,6 @@ public class User implements UserDetails{
 	public String getMail() {
 		return mail;
 	}
-
 
 	public void setMail(String mail) {
 		this.mail = mail;
@@ -125,7 +125,6 @@ public class User implements UserDetails{
     	UserDto userDto = new UserDto();
     	userDto.setIdUser(this.getIdUser());
     	userDto.setPseudo(this.getPseudo());
-    	userDto.setPassword(this.getPassword());
     	userDto.setMail(this.getMail());
     	userDto.setEnabled(this.isEnabled());
     	userDto.setRole(this.getRole());
