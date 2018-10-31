@@ -3,13 +3,11 @@ package taa.springboot.web;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -57,6 +55,8 @@ public class UserController implements UserDetailsService{
 		}
 		return new ResponseEntity<String>("POST user ok", HttpStatus.OK);
 	}
+	
+	
 	
 	@DeleteMapping("/delete/{id}")
 	public @ResponseBody ResponseEntity<String> delete(@PathVariable Long id){
@@ -135,31 +135,33 @@ public class UserController implements UserDetailsService{
 	}
 	
 	@PutMapping("/{idUser}/addPlace/{idPlace}")
-	public @ResponseBody ResponseEntity<String> addPlace(@PathVariable Long idUser, @PathVariable Long idPlace){
+	public @ResponseBody ResponseEntity<UserDto> addPlace(@PathVariable Long idUser, @PathVariable Long idPlace){
+		User user;
 		try {
-			User user = userDao.findById(idUser).get();
-			Place place = placeDao.findById(idPlace).get();			
+			user = userDao.findById(idUser).get();
+			Place place = placeDao.findById(idPlace).get();		
 			place.getUsers().add(user);
 			placeDao.save(place);
 			user.getPlaces().add(place);			
 		}catch(Exception ex){
-			return new ResponseEntity<String>("PUT user not found", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<UserDto>(new UserDto(), HttpStatus.BAD_REQUEST);
 		}	
-		return new ResponseEntity<String>("PUT user ok", HttpStatus.OK);
+		return new ResponseEntity<UserDto>(user.toUserDto(), HttpStatus.OK);
 	}
 
 	@PutMapping("/{idUser}/removePlace/{idPlace}")
-	public @ResponseBody ResponseEntity<String> removePlace(@PathVariable Long idUser, @PathVariable Long idPlace){
+	public @ResponseBody ResponseEntity<UserDto> removePlace(@PathVariable Long idUser, @PathVariable Long idPlace){
+		User user;
 		try {
-			User user = userDao.findById(idUser).get();
+			user = userDao.findById(idUser).get();
 			Place place = placeDao.findById(idPlace).get();			
 			place.getUsers().remove(user);
 			placeDao.save(place);
 			user.getPlaces().remove(place);			
 		}catch(Exception ex){
-			return new ResponseEntity<String>("PUT user not found", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<UserDto>(new UserDto(), HttpStatus.BAD_REQUEST);
 		}	
-		return new ResponseEntity<String>("PUT user ok", HttpStatus.OK);
+		return new ResponseEntity<UserDto>(user.toUserDto(), HttpStatus.OK);
 	}
 
 	@Override

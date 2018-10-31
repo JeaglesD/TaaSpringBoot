@@ -45,11 +45,11 @@ public class CityDto {
 		this.postCode = postCode;
 	}
 
-	public Set<Long> getPlaces() {
+	public Set<Long> getIdPlaces() {
 		return idPlaces;
 	}
 
-	public void setPlaces(Set<Long> idPlaces) {
+	public void setIdPlaces(Set<Long> idPlaces) {
 		this.idPlaces = idPlaces;
 	}
 	

@@ -77,7 +77,7 @@ public class City {
 		for(Place place : this.getPlaces()) {
 			idPlaces.add(place.getIdPlace());
 		}
-		cityDto.setPlaces(idPlaces);
+		cityDto.setIdPlaces(idPlaces);
 		return cityDto;
 	}
 	

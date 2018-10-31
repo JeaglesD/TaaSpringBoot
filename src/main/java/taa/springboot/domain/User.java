@@ -81,7 +81,6 @@ public class User implements UserDetails{
 	
 
 	public void setPassword(String password) {
-		System.out.println("password"+ password);
 		this.password = password;
 	}
 

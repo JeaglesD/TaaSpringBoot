@@ -3,6 +3,7 @@ package taa.springboot.config;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -14,6 +15,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import taa.springboot.web.UserController;
 
@@ -26,9 +29,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	private UserController userController;
 	
 	private static final String[] AUTH_WHITELIST = {
-            // -- swagger ui
 //			"/**",
+//			"/api/users/update",
 			"/api/users/create",
+			// -- swagger ui
             "/v2/api-docs",
             "/swagger-resources",
             "/swagger-resources/**",
@@ -62,12 +66,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 
 	@Override
 	protected void configure(HttpSecurity http)throws Exception {
-		http.csrf().disable()
+		http
+		.csrf().disable()
 		.authorizeRequests()
 		.antMatchers(AUTH_WHITELIST).permitAll()
 		.anyRequest()
 		.authenticated()
 		.and()
-		.httpBasic();
+		.logout().logoutRequestMatcher(new AntPathRequestMatcher("/api/logout"))
+		.deleteCookies("JSESSIONID")
+		.invalidateHttpSession(true) 
+		.and()
+		.httpBasic()
+		;
 	}
 }
