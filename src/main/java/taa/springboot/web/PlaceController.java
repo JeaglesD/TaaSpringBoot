@@ -48,9 +48,7 @@ public class PlaceController {
 	
 	@GetMapping("/")
 	public @ResponseBody ResponseEntity<List<PlaceDto>> getAll(){
-		System.out.println("ici");
 		try{
-			System.out.println("là");
 			List<PlaceDto> placesDto = new ArrayList<PlaceDto>();
 			List<Place> places = placeDao.findAll();
 			for(Place place : places){
@@ -78,13 +76,18 @@ public class PlaceController {
 	}
 	
 	@PutMapping("/update")
-	public @ResponseBody ResponseEntity<String> update(@RequestBody Place place) {
-		try {		
-			placeDao.save(place);
+	public @ResponseBody ResponseEntity<PlaceDto> update(@RequestBody Place place) {
+		try {
+			if(placeDao.findById(place.getIdPlace()).isPresent()) {
+				placeDao.save(place);			
+			}else {
+				System.out.println("no id");
+				return new ResponseEntity<PlaceDto>(new PlaceDto(),HttpStatus.BAD_REQUEST);
+			}
 		}catch (Exception ex) {
-			return new ResponseEntity<String>("PUT place not found",HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<PlaceDto>(new PlaceDto(),HttpStatus.BAD_REQUEST);
 		}
-		return new ResponseEntity<String>("PUT place ok",HttpStatus.OK);
+		return new ResponseEntity<PlaceDto>(place.toPlaceDto(),HttpStatus.OK);
 	}
 
 }

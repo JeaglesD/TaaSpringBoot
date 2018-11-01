@@ -4,18 +4,20 @@ import java.util.Set;
 
 public class ActivityDto {
 	private Long idActivity;
-	private String label;
-	private Set <Long> idWeathers;;
-	private Set <Long> idUsers;
+	private String name;
+	private Double minTemp;
+	private Double maxTemp;
 	private Set <Long> idPlaces;
 	
 	public ActivityDto() {
 	       super();
 	}
 
-	public ActivityDto(String label) {
+	public ActivityDto(String name, Double minTemp, Double maxTemp) {
 		super();
-		this.label = label;
+		this.name = name;
+		this.minTemp = minTemp;
+		this.maxTemp = maxTemp;
 	}
 	
 	public Long getIdActivity() {
@@ -26,28 +28,29 @@ public class ActivityDto {
 		this.idActivity = idActivity;
 	}
 
-	public String getLabel() {
-		return label;
+	public String getName() {
+		return name;
 	}
 
-	public void setLabel(String label) {
-		this.label = label;
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+
+	public Double getMinTemp() {
+		return minTemp;
 	}
 
-	public Set<Long> getIdWeathers() {
-		return idWeathers;
+	public void setMinTemp(Double minTemp) {
+		this.minTemp = minTemp;
 	}
 
-	public void setIdWeathers(Set<Long> idWeathers) {
-		this.idWeathers = idWeathers;
+	public Double getMaxTemp() {
+		return maxTemp;
 	}
 
-	public Set<Long> getIdUsers() {
-		return idUsers;
-	}
-
-	public void setIdUsers(Set<Long> users) {
-		this.idUsers = users;
+	public void setMaxTemp(Double maxTemp) {
+		this.maxTemp = maxTemp;
 	}
 
 	public Set<Long> getIdPlaces() {
@@ -60,7 +63,7 @@ public class ActivityDto {
 	
 	@Override
 	public String toString() {
-		return "Activity [idActivity=" + idActivity + ", label=" + label + ", Weathers="
-				+ idWeathers.toString() + "]";
+		return "Activity [idActivity=" + idActivity + ", name=" + name + ", minTemp="
+				+ minTemp.toString() + " maxTemp=" + maxTemp.toString() + "]";
 	}
 }

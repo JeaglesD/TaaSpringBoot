@@ -122,7 +122,7 @@ public class UserController implements UserDetailsService{
 	@PutMapping("/update")
 	public @ResponseBody ResponseEntity<String> update(@RequestBody User user) {
 		try {
-			if(userDao.findById(user.getIdUser()).get() != null) {
+			if(userDao.findById(user.getIdUser()).isPresent()) {
 				user.setPassword(passwordEncoder.encode(user.getPassword()));
 				userDao.save(user);			
 			}else{

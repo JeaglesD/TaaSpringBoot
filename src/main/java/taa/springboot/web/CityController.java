@@ -93,39 +93,41 @@ public class CityController {
 	}
 		
 	@PutMapping("/update")
-	public @ResponseBody ResponseEntity<String> update(@RequestBody City city) {
+	public @ResponseBody ResponseEntity<CityDto> update(@RequestBody City city) {
 		try {		
 			cityDao.save(city);
 		}catch (Exception ex) {
-			return new ResponseEntity<String>("PUT city not found",HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<CityDto>(new CityDto(),HttpStatus.BAD_REQUEST);
 		}
-		return new ResponseEntity<String>("PUT city ok",HttpStatus.OK);
+		return new ResponseEntity<CityDto>(city.toCityDto(),HttpStatus.OK);
 	}
 	
 	@PutMapping("/{idCity}/addPlace/{idPlace}")
-	public @ResponseBody ResponseEntity<String> addPlace(@PathVariable Long idCity, @PathVariable Long idPlace){
+	public @ResponseBody ResponseEntity<CityDto> addPlace(@PathVariable Long idCity, @PathVariable Long idPlace){
+		City city;
 		try {
-			City city = cityDao.findById(idCity).get();
+			city = cityDao.findById(idCity).get();
 			Place place = placeDao.findById(idPlace).get();			
 			place.setCity(city);
 			placeDao.save(place);
 			city.getPlaces().add(place);			
 		}catch(Exception ex){
-			return new ResponseEntity<String>("PUT city not found", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<CityDto>(new CityDto(), HttpStatus.BAD_REQUEST);
 		}	
-		return new ResponseEntity<String>("PUT city ok", HttpStatus.OK);
+		return new ResponseEntity<CityDto>(city.toCityDto(), HttpStatus.OK);
 	}
 
 	@PutMapping("/{idCity}/removePlace/{idPlace}")
-	public @ResponseBody ResponseEntity<String> removePlace(@PathVariable Long idCity, @PathVariable Long idPlace){
+	public @ResponseBody ResponseEntity<CityDto> removePlace(@PathVariable Long idCity, @PathVariable Long idPlace){
+		City city;
 		try {
-			City city = cityDao.findById(idCity).get();
+			city = cityDao.findById(idCity).get();
 			Place place = placeDao.findById(idPlace).get();			
 			city.getPlaces().remove(place);		
 			cityDao.save(city);
 		}catch(Exception ex){
-			return new ResponseEntity<String>("PUT city not found", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<CityDto>(new CityDto(), HttpStatus.BAD_REQUEST);
 		}	
-		return new ResponseEntity<String>("PUT city ok", HttpStatus.OK);
+		return new ResponseEntity<CityDto>(city.toCityDto(), HttpStatus.OK);
 	}
 }

@@ -18,11 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import taa.springboot.domain.Activity;
 import taa.springboot.domain.Place;
-import taa.springboot.domain.Weather;
 import taa.springboot.dto.ActivityDto;
 import taa.springboot.service.ActivityDao;
 import taa.springboot.service.PlaceDao;
-import taa.springboot.service.WeatherDao;
 
 @RestController
 @RequestMapping("/api/activities")
@@ -30,8 +28,6 @@ public class ActivityController {
 	
 	@Autowired
 	private ActivityDao activityDao;
-	@Autowired
-	private WeatherDao weatherDao;
 	@Autowired
 	private PlaceDao placeDao;
 	
@@ -77,7 +73,7 @@ public class ActivityController {
 	@GetMapping("/label/{label}")
 	public @ResponseBody ResponseEntity<List<ActivityDto>> getByLabel(@PathVariable String label){
 		List<ActivityDto> activitiesDto = new ArrayList<ActivityDto>();
-		List<Activity> activities = activityDao.findByLabel(label);
+		List<Activity> activities = activityDao.findByName(label);
 		for(Activity activity : activities){
 			activitiesDto.add(activity.toActivityDto());
 		}			
@@ -85,40 +81,43 @@ public class ActivityController {
 	}
 	
 	@PutMapping("/update")
-	public @ResponseBody ResponseEntity<String> update(@RequestBody Activity activity) {
+	public @ResponseBody ResponseEntity<ActivityDto> update(@RequestBody Activity activity) {
 		try {		
 			activityDao.save(activity);
 		}catch (Exception ex) {
-			return new ResponseEntity<String>("PUT activity not found",HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<ActivityDto>(activity.toActivityDto(),HttpStatus.BAD_REQUEST);
 		}
-		return new ResponseEntity<String>("PUT activity ok",HttpStatus.OK);
-	}
-	
-	@PutMapping("/{idActivity}/addWeather/{idWeather}")
-	public @ResponseBody ResponseEntity<String> addWeather(@PathVariable Long idActivity, @PathVariable Long idWeather){
-		try {
-			Activity activity = activityDao.findById(idActivity).get();
-			Weather weather = weatherDao.findById(idWeather).get();
-			activity.getWeathers().add(weather);
-		}catch(Exception ex) {
-			return new ResponseEntity<String>("PUT activity not found", HttpStatus.BAD_REQUEST);
-		}
-		return new ResponseEntity<String>("PUT activity ok", HttpStatus.OK);
-		
+		return new ResponseEntity<ActivityDto>(new ActivityDto(),HttpStatus.OK);
 	}
 	
 	@PutMapping("/{idActivity}/addPlace/{idPlace}")
-	public @ResponseBody ResponseEntity<String> addPlace(@PathVariable Long idActivity,@PathVariable Long idPlace){
+	public @ResponseBody ResponseEntity<ActivityDto> addPlace(@PathVariable Long idActivity,@PathVariable Long idPlace){
+		Activity activity;
 		try {
-			Activity activity = activityDao.findById(idActivity).get();
+			activity = activityDao.findById(idActivity).get();
 			Place place = placeDao.findById(idPlace).get();
 			place.getActivities().add(activity);
 			placeDao.save(place);
 			activity.getPlaces().add(place);
 		}catch(Exception ex) {
-			return new ResponseEntity<String>("PUT activity not found", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<ActivityDto>(new ActivityDto(), HttpStatus.BAD_REQUEST);
 		}
-		return new ResponseEntity<String>("PUT activity ok", HttpStatus.OK);
+		return new ResponseEntity<ActivityDto>(activity.toActivityDto(), HttpStatus.OK);
+	}
+	
+	@PutMapping("/{idActivity}/removePlace/{idPlace}")
+	public @ResponseBody ResponseEntity<ActivityDto> removePlace(@PathVariable Long idActivity,@PathVariable Long idPlace){
+		Activity activity;
+		try {
+			activity = activityDao.findById(idActivity).get();
+			Place place = placeDao.findById(idPlace).get();
+			place.getActivities().remove(activity);
+			placeDao.save(place);
+			activity.getPlaces().remove(place);
+		}catch(Exception ex) {
+			return new ResponseEntity<ActivityDto>(new ActivityDto(), HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<ActivityDto>(activity.toActivityDto(), HttpStatus.OK);
 	}
 	
 	

@@ -18,9 +18,9 @@ import javax.persistence.JoinColumn;
 @Entity
 public class Activity {
 	private Long idActivity;
-	private String label;
-	private Set <Weather> weathers;;
-	private Set <User> users;
+	private String name;
+	private Double minTemp;
+	private Double maxTemp;
 	private Set <Place> places;
 	
 	public Activity() {
@@ -28,10 +28,11 @@ public class Activity {
 	}
 
 
-	public Activity(String label) {
-		this.label=label;
+	public Activity(String name,Double minTemp, Double maxTemp){
+		this.name = name;
+		this.minTemp = minTemp;
+		this.maxTemp = maxTemp;
 	}
-
 
 	@Id
 	@GeneratedValue
@@ -43,42 +44,28 @@ public class Activity {
 		this.idActivity = idActivity;
 	}
 
-	public String getLabel() {
-		return label;
+	public String getName() {
+		return name;
 	}
 
-	public void setLabel(String label) {
-		this.label = label;
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public Double getMinTemp() {
+		return minTemp;
 	}
 
-
-	@ManyToMany
-	@JoinTable(name="ActivityWeather",
-	joinColumns= { @JoinColumn(name = "idActivity")},
-	inverseJoinColumns= {@JoinColumn(name = "idWeather")})
-	public Set<Weather> getWeathers() {
-		return weathers;
+	public void setMinTemp(Double minTemp) {
+		this.minTemp = minTemp;
 	}
 
-
-
-
-	public void setWeathers(Set<Weather> weathers) {
-		this.weathers = weathers;
+	public Double getMaxTemp() {
+		return maxTemp;
 	}
 
-
-	@ManyToMany
-	@JoinTable(name="ActivityUser",
-	joinColumns= { @JoinColumn(name = "idActivity")},
-	inverseJoinColumns= {@JoinColumn(name = "idUser")})
-	public Set<User> getUsers() {
-		return users;
-	}
-
-
-	public void setUsers(Set<User> users) {
-		this.users = users;
+	public void setMaxTemp(Double maxTemp) {
+		this.maxTemp = maxTemp;
 	}
 
 	@ManyToMany
@@ -97,33 +84,23 @@ public class Activity {
 	public ActivityDto toActivityDto(){
 		ActivityDto activityDto = new ActivityDto();
 		activityDto.setIdActivity(this.getIdActivity());
-		activityDto.setLabel(this.getLabel());
-		Set<Long> idUsers = new HashSet<Long>();
-		for(User user : this.getUsers()){
-			idUsers.add(user.getIdUser());			
-		}
-		activityDto.setIdUsers(idUsers);
-		
+		activityDto.setName(this.getName());
+		activityDto.setMinTemp(this.getMinTemp());
+		activityDto.setMaxTemp(this.getMaxTemp());
 		Set<Long> idPlaces = new HashSet<Long>();
 		for(Place place : this.getPlaces()){
 			idPlaces.add(place.getIdPlace());			
 		}
 		activityDto.setIdPlaces(idPlaces);
-		
-		Set<Long> idWeathers = new HashSet<Long>();
-		for(Weather weather : this.getWeathers()){
-			idWeathers.add(weather.getIdWeather());			
-		}
-		activityDto.setIdWeathers(idWeathers);
-		
+				
 		return activityDto;
 		
 	}
 
 	@Override
 	public String toString() {
-		return "Activity [idActivity=" + idActivity + ", label=" + label + ", Weathers="
-				+ weathers.toString() + "]";
+		return "Activity [idActivity=" + idActivity + ", name=" + name + ", minTemp="
+				+ minTemp.toString() + " maxTemp=" + maxTemp.toString() + "]";
 	}
 
 
