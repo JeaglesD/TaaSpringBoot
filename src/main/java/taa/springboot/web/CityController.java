@@ -73,10 +73,10 @@ public class CityController {
 	}
 	
 	@GetMapping("/name/{name}")
-	public @ResponseBody ResponseEntity<List<CityDto>> getByName(@PathVariable String name){
+	public @ResponseBody ResponseEntity<List<CityDto>> getByNameStartingWith(@PathVariable String name){
 		List<CityDto> citiesDto = new ArrayList<CityDto>();
 		
-		for(City city : cityDao.findByName(name)){
+		for(City city : cityDao.findByNameStartingWith(name)){
 			citiesDto.add(city.toCityDto());
 		}
 		return new ResponseEntity<List<CityDto>>(citiesDto,HttpStatus.OK);

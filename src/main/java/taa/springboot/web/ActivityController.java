@@ -71,9 +71,9 @@ public class ActivityController {
 	}
 	
 	@GetMapping("/label/{label}")
-	public @ResponseBody ResponseEntity<List<ActivityDto>> getByLabel(@PathVariable String label){
+	public @ResponseBody ResponseEntity<List<ActivityDto>> getByName(@PathVariable String name){
 		List<ActivityDto> activitiesDto = new ArrayList<ActivityDto>();
-		List<Activity> activities = activityDao.findByName(label);
+		List<Activity> activities = activityDao.findByName(name);
 		for(Activity activity : activities){
 			activitiesDto.add(activity.toActivityDto());
 		}			
@@ -85,9 +85,9 @@ public class ActivityController {
 		try {		
 			activityDao.save(activity);
 		}catch (Exception ex) {
-			return new ResponseEntity<ActivityDto>(activity.toActivityDto(),HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<ActivityDto>(new ActivityDto(),HttpStatus.BAD_REQUEST);
 		}
-		return new ResponseEntity<ActivityDto>(new ActivityDto(),HttpStatus.OK);
+		return new ResponseEntity<ActivityDto>(activity.toActivityDto(),HttpStatus.OK);
 	}
 	
 	@PutMapping("/{idActivity}/addPlace/{idPlace}")

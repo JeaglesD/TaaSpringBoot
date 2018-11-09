@@ -17,4 +17,7 @@ public interface CityDao extends JpaRepository<City, Long>{
 	
 	@Query("from City c where c.name = :name and c.postCode = :postCode")	
 	public City findByNameAndCodePost(@Param("name") String name, @Param("postCode") Integer postCode);
+
+	@Query
+	public List<City> findByNameStartingWith(String name);
 }
